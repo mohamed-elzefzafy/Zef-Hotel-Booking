@@ -1,11 +1,13 @@
 import express from "express";
-import { register } from "../controllers/userControler";
+import { login, register, validToken } from "../controllers/userControler";
 import photoUpload from "../middlewares/photoUploadMiddleWare";
+import { loginValidation, registerValidation } from "../validation/userValidation";
+import { verifyToken } from "../middlewares/auth";
 const router = express.Router();
 
-// router.route("/register").post( photoUpload.single("profilePhoto") , register);
-router.route("/register").post( photoUpload.single("profilePhoto") , register);
-// router.route("/login").post( login);
+router.route("/register").post( photoUpload.single("profilePhoto"), registerValidation , register);
+router.route("/login").post(loginValidation , login);
+router.route("/valid-token").get(verifyToken , validToken);
 // router.route("/logout").post(logout);
 
 

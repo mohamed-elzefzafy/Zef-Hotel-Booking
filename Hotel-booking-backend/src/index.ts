@@ -2,15 +2,21 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
+import cookieParser from "cookie-parser";
 import connectDb from "./config/connectDb";
 import mountRoutes from './routes/mountRoutes';
 dotenv.config({ path: path.resolve(__dirname, "../config.env") });
 
 
+
 const app = express();
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+app.use(cors({
+  origin : process.env.FRONT_URL,
+  credentials : true,
+}));
 
 
 connectDb();

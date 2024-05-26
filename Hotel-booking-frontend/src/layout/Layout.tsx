@@ -11,7 +11,7 @@ const Layout = ({children} : IProps) => {
     <div className='flex flex-col min-h-screen'>
     <Header/>
     <Hero/>
-    <div className='container mx-auto py-10 flex-1'>{children}</div>
+    <div className='container mx-auto py-10 flex-1 flex items-center justify-center'>{children}</div>
     <Footer/>
 
       </div>

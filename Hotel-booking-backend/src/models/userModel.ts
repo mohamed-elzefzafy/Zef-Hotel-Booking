@@ -8,7 +8,7 @@ email : string,
 password : string,
 firstName : string, 
 lastName : string,
-profilePhoto : Object
+profilePhoto : object 
 }
 
 const UserSchema = new  mongoose.Schema({
