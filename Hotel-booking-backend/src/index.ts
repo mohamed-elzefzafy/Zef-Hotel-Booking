@@ -5,7 +5,7 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import connectDb from "./config/connectDb";
 import mountRoutes from './routes/mountRoutes';
-dotenv.config({ path: path.resolve(__dirname, "../config.env") });
+dotenv.config({path: process.env.DOTENV_CONFIG_PATH  || path.resolve(__dirname, "../config.env") });
 
 
 
@@ -20,6 +20,8 @@ app.use(cors({
 
 
 connectDb();
+
+app.use(express.static(path.join(__dirname, "../../Hotel-booking-frontend/dist")));
 
 app.get("/" , async(req : Request, res : Response) => {
 res.json("welcome to zef-hotel-booking api...");

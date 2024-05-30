@@ -84,3 +84,19 @@ res.status(200).json({userId : user._id});
  export const validToken = asyncHandler(async (req : Request , res : Response, next : NextFunction)   => {
 res.status(200).send({userId : req.userId})
  })
+
+
+   /**---------------------------------------
+ * @desc    validToken
+ * @route   /api/v1/users/logout
+ * @method  POST
+ * @access  public 
+ ----------------------------------------*/
+ export const logout = asyncHandler(async (req : Request , res : Response, next : NextFunction)   => {
+res.cookie("token" , "" , {
+  httpOnly : true,
+  expires : new Date(0),
+
+})
+res.status(200).json({message : "logged out successfully"});
+ })

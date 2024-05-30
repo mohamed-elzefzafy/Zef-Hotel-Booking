@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form"
 import { useAppContext } from "../components/contexts/AppContext";
 import { Link, useNavigate } from "react-router-dom";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { login } from "../apiClient";
 
 export type LoginFormData = {
@@ -10,23 +10,27 @@ export type LoginFormData = {
 }
 const LoginPage = () => {
   const { showToast } = useAppContext();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const { register, watch, handleSubmit, formState: { errors } } = useForm<LoginFormData>();
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>();
 
   const mutation = useMutation(login , {
     onSuccess : async()  => {
-     console.log("Login success");
+      await queryClient.invalidateQueries("validateToken");
+    showToast({message : "login success" , type : "SUCCESS"});
+    navigate("/");
     } ,
     onError : (error : Error) => {
-console.log(error);
+showToast({message : error.message , type : "ERROR"})
 
     }
   })
   
 
-  const onSubmit = () => {
+  const onSubmit = handleSubmit((data) => {
+    mutation.mutate(data);
+  })
 
-  }
 
 return (
   <form className="flex flex-col gap-5 px-2 md:px-0" onSubmit={onSubmit}>

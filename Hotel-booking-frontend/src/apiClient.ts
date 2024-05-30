@@ -1,5 +1,4 @@
 import { LoginFormData } from "./pages/LoginPage";
-import { RegisterFormData } from "./pages/RegisterPage";
 import request from "./utils/request";
 
 export const registerApi = async (data: FormData) => {
@@ -20,6 +19,13 @@ export const login = async (data: LoginFormData) => {
   });
   return response.data;
 };
+
+
+export const logout = async () => {
+  const response = await request.post("/api/v1/users/logout");
+  return response.data;
+};
+
 
 
 export const validateToken = async () => {

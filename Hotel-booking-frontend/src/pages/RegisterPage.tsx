@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { registerApi } from "../apiClient";
 import { useAppContext } from "../components/contexts/AppContext";
 
@@ -16,12 +16,14 @@ export type RegisterFormData = {
 
 const RegisterPage = () => {
   const { showToast } = useAppContext();
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const { register, watch, handleSubmit, formState: { errors } } = useForm<RegisterFormData>();
   const [profilePhotoPreview, setProfilePhotoPreview] = useState<string | null>(null);
 
   const mutation = useMutation(registerApi, {
-    onSuccess: () => {
+    onSuccess: async() => {
+      await queryClient.invalidateQueries("validateToken");
       showToast({ message: "Registration successful", type: "SUCCESS" });
       navigate("/");
     },
