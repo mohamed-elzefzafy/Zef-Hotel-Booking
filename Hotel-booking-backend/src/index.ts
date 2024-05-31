@@ -21,7 +21,7 @@ app.use(cors({
 
 connectDb();
 
-app.use(express.static(path.join(__dirname, "../../Hotel-booking-frontend/dist")));
+// app.use(express.static(path.join(__dirname, "../../Hotel-booking-frontend/dist")));
 
 app.get("/" , async(req : Request, res : Response) => {
 res.json("welcome to zef-hotel-booking api...");
