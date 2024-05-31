@@ -5,8 +5,8 @@
   "main": "./src/index.ts",
   "scripts": {
     "dev": "nodemon",
-    "start": "ts-node-dev index.ts",
-    "build": "tsc",
+    "build": "npm install --force && npx tsc",
+    "start": "node ./dist/index.js",
     "e2e": "cross-env DOTENV_CONFIG_PATH=e2e.env nodemon"
   },
   "engines": {
