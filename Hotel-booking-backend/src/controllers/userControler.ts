@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import { cloudinaryUploadImage } from "../utils/cloudinary";
 import { formatImage } from "../middlewares/photoUploadMiddleWare";
 import bcrypt from "bcryptjs";
+import { UserType } from "../utils/types";
 
  /**---------------------------------------
  * @desc    register user
@@ -17,25 +18,29 @@ let user  = await UserModel.findOne({email : req.body.email});
 if (user) {
  return res.status(400).json({message: "User already exists"});
 }
-user = new UserModel(req.body);
-await user.save();
+const newUser : UserType = req.body;
+const profilePhoto = req.file as Express.Multer.File | undefined;
 
-if (req.file) {
-  const file = formatImage(req.file)
-  // if (user.profilePhoto.public_id !== null) {
-  //   await cloudinaryRemoveImage(user.profilePhoto.public_id);
-  // }
+
+if (profilePhoto) {
+  const file = formatImage(profilePhoto)
+
 if (file) {
   const {secure_url , public_id} = await cloudinaryUploadImage(file);
 
-  user.profilePhoto = {
+  newUser.profilePhoto = {
     url : secure_url,
     public_id : public_id
 }
   }
 
-  await user.save();
+
 }
+
+user = new UserModel(newUser);
+await user.save();
+
+
 const token = jwt.sign({userId : user._id} , process.env.JWT_SECRET as string , {expiresIn : "1d"});
 res.cookie("token" , token , {
   httpOnly: true,

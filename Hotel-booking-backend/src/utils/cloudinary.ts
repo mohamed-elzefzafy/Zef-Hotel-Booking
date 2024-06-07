@@ -1,4 +1,6 @@
-
+import dotenv from "dotenv";
+import path from "path";
+dotenv.config({path: process.env.DOTENV_CONFIG_PATH  || path.resolve(__dirname,  "../../config.env") });
 import * as cloudinary from 'cloudinary';
 
 cloudinary.v2.config({

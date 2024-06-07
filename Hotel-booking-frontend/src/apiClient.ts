@@ -32,3 +32,14 @@ export const validateToken = async () => {
   const response = await request.get("/api/v1/users/valid-token");
   return response.data;
 };
+
+// hotel apies 
+
+export const addHotel = async (data: FormData) => {
+  const response = await request.post("/api/v1/my-hotels", data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
