@@ -5,6 +5,7 @@ import path from "path";
 import cookieParser from "cookie-parser";
 import connectDb from "./config/connectDb";
 import mountRoutes from './routes/mountRoutes';
+import { errorHandler, notFound } from "./middlewares/errorHandling";
 dotenv.config({path: process.env.DOTENV_CONFIG_PATH  || path.resolve(__dirname, "../config.env") });
 
 
@@ -31,6 +32,10 @@ res.json("welcome to zef-hotel-booking api...");
 
 
 mountRoutes(app);
+
+app.use(notFound);
+app.use(errorHandler);
+
 
 app.listen(5000 , () => {
   console.log(`app running on port 5000`);
