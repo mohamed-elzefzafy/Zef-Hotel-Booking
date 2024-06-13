@@ -38,5 +38,30 @@ await expect(page.getByText("Hotel saved")).toBeVisible();
 })
 
 
+test("should display hotels" , async({page}) => {
+  await page.goto(`${ui_url}my-hotels`);
+  await expect(page.getByText("hotelName").first()).toBeVisible();
+  await expect(page.getByText("hoteldescription")).toBeVisible();
+  await expect(page.getByText("hotelcity , hotelcountry")).toBeVisible();
+  await expect(page.getByText("Budget")).toBeVisible();
+  await expect(page.getByText("$120 per night")).toBeVisible();
+  await expect(page.getByText("2 adult , 3 children")).toBeVisible();
+  await expect(page.getByText("3 star rating")).toBeVisible();
 
+  await expect(page.getByRole("link" , {name : "View Details"}).first()).toBeVisible();
+  await expect(page.getByRole("link" , {name : "Add hotel"})).toBeVisible();
+})
 
+test("should edit hotel" , async({page}) => {
+await page.goto(`${ui_url}my-hotels`);
+await page.getByRole("link" , {name : "View Details"}).first().click();
+await page.waitForSelector("[name=name]" , {state : "attached"});
+await expect(page.locator("[name=name]")).toHaveValue("hotelName");
+await page.locator("[name=name]").fill("updated - hotelName ---");
+await page.getByRole("button" , {name : "Save"}).click();
+await expect(page.getByText("updated Hotel saved")).toBeVisible();
+await page.reload();
+await expect(page.locator("[name=name]")).toHaveValue("updated - hotelName ---");
+await page.locator("[name=name]").fill("hotelName");
+await page.getByRole("button" , {name : "Save"}).click();
+})

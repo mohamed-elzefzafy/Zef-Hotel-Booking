@@ -1,5 +1,6 @@
 import { LoginFormData } from "./pages/LoginPage";
 import request from "./utils/request";
+import { HotelType } from "./utils/types";
 
 export const registerApi = async (data: FormData) => {
   const response = await request.post("/api/v1/users/register", data, {
@@ -21,7 +22,7 @@ export const login = async (data: LoginFormData) => {
 };
 
 
-export const logout = async () => {
+export const logout = async () : Promise<HotelType[]> => {
   const response = await request.post("/api/v1/users/logout");
   return response.data;
 };
@@ -43,3 +44,39 @@ export const addHotel = async (data: FormData) => {
   });
   return response.data;
 };
+
+
+export const getHotels = async () : Promise<HotelType[] | undefined> => {
+try {
+  const response = await request.get("/api/v1/my-hotels");
+  return response.data;
+  
+} catch (error) {
+  console.log(error);
+  
+}
+};
+
+
+export const getOneHotel = async (hotelId : string) : Promise<HotelType | undefined> => {
+  try {
+    const response = await request.get(`/api/v1/my-hotels/${hotelId}`);
+    return response.data;
+    
+  } catch (error) {
+    console.log(error);
+    
+  }
+  };
+  
+
+  export const updateHotel = async (data: FormData) => {
+    const response = await request.put(`/api/v1/my-hotels/update-hotel/${data.get("hotelId")}`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        
+      },
+    });
+    return response.data;
+  };
+  

@@ -5,9 +5,14 @@ import RegisterPage from './pages/RegisterPage'
 import LoginPage from './pages/LoginPage'
 import { useAppContext } from './components/contexts/AppContext'
 import AddHotel from './pages/AddHotel'
+import { getHotels } from './apiClient'
+import MyHotels from './pages/MyHotels'
+import EditHotel from './pages/EditHotel'
 
 function App() {
   const {isLoggedIn} = useAppContext();
+  console.log(getHotels());
+  
 
   return (
 
@@ -22,6 +27,9 @@ function App() {
 
 <>
 <Route path='/add-hotel' element={<Layout> <AddHotel/>  </Layout>}/>
+<Route path='/edit-hotel/:hotelId' element={<Layout> <EditHotel/>  </Layout>}/>
+<Route path='/my-hotels' element={<Layout> <MyHotels/>  </Layout>}/>
+
 </>
 }
 
