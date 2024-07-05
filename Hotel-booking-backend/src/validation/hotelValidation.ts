@@ -1,4 +1,4 @@
-import { check } from "express-validator";
+import { check, param } from "express-validator";
 import { validatorMiddleWare } from "../middlewares/validatorMiddleWare";
 
 
@@ -13,8 +13,6 @@ export const hotelValidation = [
   validatorMiddleWare
 ]
 
-// export const loginValidation = [
-//   check("email" , "email is required").isEmail(),
-//   check("password" , "password length at least 6 characters").isLength({min : 6}),
-//   validatorMiddleWare
-// ]
+export const getOneHotelByIdValidation = [
+  param("id").notEmpty().withMessage("Hotel Id Param is required"),validatorMiddleWare
+]

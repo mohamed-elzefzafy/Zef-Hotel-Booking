@@ -60,3 +60,11 @@ export type CloudinaryObject = {
 };
 
 
+export type hotelSearchResponse = {
+  data : HotelType[];
+  pagination : {
+    total : number;
+    page : number;
+    pages : number
+  }
+}

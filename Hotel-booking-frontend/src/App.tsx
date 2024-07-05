@@ -8,6 +8,8 @@ import AddHotel from './pages/AddHotel'
 import { getHotels } from './apiClient'
 import MyHotels from './pages/MyHotels'
 import EditHotel from './pages/EditHotel'
+import SearchPage from './pages/SearchPage'
+import HotelDetailsPage from './pages/HotelDetailsPage'
 
 function App() {
   const {isLoggedIn} = useAppContext();
@@ -19,7 +21,8 @@ function App() {
 <BrowserRouter>
 <Routes>
 <Route  path='/' element={<Layout> <HomePage/> </Layout>}/>
-<Route  path='/search' element={<Layout> <p>Search page</p> </Layout>}/>
+<Route  path='/search' element={<Layout> <SearchPage/> </Layout>}/>
+<Route  path='/details/:hotelId' element={<Layout> <HotelDetailsPage/> </Layout>}/>
 <Route  path='/register' element={<Layout> <RegisterPage/> </Layout>}/>
 <Route  path='/login' element={<Layout>  <LoginPage/> </Layout>}/>
 
