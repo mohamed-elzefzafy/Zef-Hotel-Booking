@@ -6,6 +6,23 @@ import { cloudinaryUploadImage } from "../utils/cloudinary";
 import { formatImage } from "../middlewares/photoUploadMiddleWare";
 import bcrypt from "bcryptjs";
 import { UserType } from "../utils/types";
+import customErrorClass from "../utils/customErrorClass";
+
+
+ /**---------------------------------------
+ * @desc    register user
+ * @route   /api/v1/users/register
+ * @method  POST
+ * @access  public 
+ ----------------------------------------*/
+ export const getLoggedUserData = asyncHandler(async (req : Request , res : Response, next : NextFunction)   => {
+const user = await UserModel.findById(req.userId).select("-password");
+if (!user) {
+  return next(customErrorClass.create(`this user not found` , 400))
+}
+res.status(200).json(user);
+ }) ;
+
 
  /**---------------------------------------
  * @desc    register user

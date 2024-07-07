@@ -3,8 +3,12 @@ import asyncHandler from "../middlewares/asyncHandler";
 import HotelModel from "../models/hotel.Model";
 import { hotelSearchResponse } from "../utils/types";
 import customErrorClass from "../utils/customErrorClass";
+import dotenv from "dotenv";
+import path from "path";
+dotenv.config({path: process.env.DOTENV_CONFIG_PATH  || path.resolve(__dirname, "../config.env") });
+import Stripe from "stripe";
 
-
+const stripe = new Stripe(process.env.STRIPE_API_KEY as string);
 
  /**---------------------------------------
  * @desc     addHotel
@@ -61,9 +65,68 @@ const response : hotelSearchResponse = {
 
 
 
+ /**---------------------------------------
+ * @desc     bookin Pyment Intent
+ * @route   /api/v1/hotels/:hotelId/booking/payment-intent
+ * @method  POST
+ * @access  public 
+ ----------------------------------------*/
+ export const bookingPymentIntent = asyncHandler(async (req : Request , res : Response, next : NextFunction)   => { 
+const {numberOfNights} = req.body;
+const hotelId = req.params.hotelId;
+
+const hotel = await HotelModel.findById(hotelId);
+if (!hotel) {
+  return next(customErrorClass.create(`hotel with Id ${hotelId} not found ` , 400));
+}
+const totalCost = numberOfNights  * hotel.pricePerNight ;
+
+const paymentIntent = await stripe.paymentIntents.create({
+  amount : totalCost,
+  currency : "USD",
+  metadata : {
+    hotelId,
+    userId : req.userId,
+  }
+})
+
+if (!paymentIntent.client_secret) {
+  return res.status(500).json({message : "error creating payment intent"});
+}
+
+
+const response = {
+  paymentId : paymentIntent.id,
+  clientSecret : paymentIntent.client_secret.toString(),
+  totalCost,
+}
+
+res.json(response);
+
+ });
 
 
 
+
+  /**---------------------------------------
+ * @desc     addHotel
+ * @route   /api/v1/hotels/:hotelId/bookings
+ * @method  POST
+ * @access  public 
+ ----------------------------------------*/
+ export const bookingHotel = asyncHandler(async (req : Request , res : Response, next : NextFunction)   => {
+const paymentIntentId = req.body.paymentIntentId;
+
+const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId as string);
+
+if (!paymentIntent) {
+  return res.status(500).json({message : "payment intent not found"});
+}
+if (paymentIntent.metadata.hotelId !== req.params.hotelId || paymentIntent.metadata.userId !==  req.userId) {
+  return res.status(500).json({message : "payment intent do not match"});
+} 
+
+ });
 
 
 

@@ -1,7 +1,7 @@
 export type UserType = {
   _id: string;
   email: string;
-  password: string;
+  password?: string;
   firstName: string;
   lastName: string;
   profilePhoto ? : CloudinaryObject,
@@ -48,11 +48,10 @@ export type HotelSearchResponse = {
 };
 
 export type PaymentIntentResponse = {
-  paymentIntentId: string;
-  clientSecret: string;
-  totalCost: number;
-};
-
+  paymentId : string,
+  clientSecret : string,
+  totalCost : number,
+}
 
 export type CloudinaryObject = {
   url :  string,

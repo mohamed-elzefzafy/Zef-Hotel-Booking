@@ -1,6 +1,6 @@
 import { LoginFormData } from "./pages/LoginPage";
 import request from "./utils/request";
-import { HotelType, hotelSearchResponse } from "./utils/types";
+import { HotelType, UserType, hotelSearchResponse } from "./utils/types";
 
 export const registerApi = async (data: FormData) => {
   const response = await request.post("/api/v1/users/register", data, {
@@ -20,6 +20,13 @@ export const login = async (data: LoginFormData) => {
   });
   return response.data;
 };
+
+
+export const getLoggedInUser = async () : Promise<UserType> => {
+  const response = await request.get("/api/v1/users/me");
+  return response.data;
+};
+
 
 
 export const logout = async () : Promise<HotelType[]> => {

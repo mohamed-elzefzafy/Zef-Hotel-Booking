@@ -18,3 +18,13 @@ await page.getByPlaceholder("where are you going?").fill("dublin");
 await page.getByRole("button" , {name : "Search"}).click();
 await expect(page.getByText("hotel-2 dublin")).toBeVisible();
 });
+
+test("should show the details page" , async ({page}) => {
+  await page.goto(ui_url);
+await page.getByPlaceholder("where are you going?").fill("dublin");
+await page.getByRole("button" , {name : "Search"}).click();
+await page.getByText("hotel-2 dublin").click();
+await expect(page).toHaveURL(/details/);
+await expect(page.getByText("hotel-2 dublin")).toBeVisible();
+await expect(page.getByRole("button" , {name : "Book Now"})).toBeVisible();
+});

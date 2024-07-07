@@ -47,12 +47,6 @@ export type HotelSearchResponse = {
   };
 };
 
-export type PaymentIntentResponse = {
-  paymentIntentId: string;
-  clientSecret: string;
-  totalCost: number;
-};
-
 
 export type CloudinaryObject = {
   url :  string,
@@ -67,4 +61,11 @@ export type hotelSearchResponse = {
     page : number;
     pages : number
   }
+}
+
+
+export type PaymentIntentResponse = {
+  paymentId : string,
+  clientSecret : string,
+  totalCost : number,
 }
