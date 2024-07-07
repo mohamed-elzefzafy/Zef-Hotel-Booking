@@ -30,6 +30,7 @@ app.use((0, cors_1.default)({
     credentials: true,
 }));
 (0, connectDb_1.default)();
+// if it is one app 
 // app.use(express.static(path.join(__dirname, "../../Hotel-booking-frontend/dist")));
 app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.json("welcome to zef-hotel-booking api...");
