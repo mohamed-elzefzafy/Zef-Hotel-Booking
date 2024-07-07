@@ -21,7 +21,7 @@ app.use(cors({
 
 
 connectDb();
-
+// if it is one app 
 // app.use(express.static(path.join(__dirname, "../../Hotel-booking-frontend/dist")));
 
 app.get("/" , async(req : Request, res : Response) => {
