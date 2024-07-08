@@ -1,15 +1,18 @@
 import { useQuery } from "react-query"
-import { getLoggedInUser, getOneHotelById } from "../apiClient"
+import { createPaymentIntent, getLoggedInUser, getOneHotelById } from "../apiClient"
 import BookingForm from "../components/BookingForm";
 import { useSearchContext } from "../components/contexts/Searchcontext";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import BookingDetailSummary from "../components/BookingDetailsSummary";
+import { useAppContext } from "../components/contexts/AppContext";
+import { Elements } from "@stripe/react-stripe-js";
 
 
 
 const BookingPage = () => {
   const search = useSearchContext();
+  const {stripePromise} = useAppContext();
   const {hotelId} = useParams();
 const [numberOfNights, setNumberOfNights] = useState<number>(0);
 
@@ -20,6 +23,11 @@ useEffect(()=>{
     
   }
 },[search.checkIn, search.checkOut]);
+
+const {data : paymentIntentData} = useQuery("createPaymentIntent" , 
+  () => createPaymentIntent(hotelId as string , numberOfNights.toString()) , {
+    enabled : !!hotelId && numberOfNights > 0
+  })
 
   const {data : hotel} = useQuery("fetchOneHotelById" , () => getOneHotelById(hotelId as string) ,{
     enabled : !!hotelId
@@ -36,7 +44,16 @@ useEffect(()=>{
     <div className="grid lg:grid-cols-[1fr_2fr] gap-4">
   <BookingDetailSummary checkIn={search.checkIn} checkOut={search.checkOut} adultCount={search.adultCount}
    childCount={search.childCount} numberOfNights={numberOfNights} hotel={hotel}/>
-      {loggedUser && <BookingForm loggedUser={loggedUser}/>}
+      {loggedUser && paymentIntentData && 
+      
+      <Elements stripe={stripePromise} options={{
+        clientSecret :paymentIntentData.clientSecret,
+      }}>
+  <BookingForm loggedUser={loggedUser} paymentInten={paymentIntentData}/>
+      </Elements>
+    
+      
+      }
     </div>
   )
 }

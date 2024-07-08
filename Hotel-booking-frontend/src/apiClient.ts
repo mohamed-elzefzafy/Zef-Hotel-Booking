@@ -1,6 +1,7 @@
+import { BookingFormData } from "./components/BookingForm";
 import { LoginFormData } from "./pages/LoginPage";
 import request from "./utils/request";
-import { HotelType, UserType, hotelSearchResponse } from "./utils/types";
+import { HotelType, PaymentIntentResponse, UserType, hotelSearchResponse } from "./utils/types";
 
 export const registerApi = async (data: FormData) => {
   const response = await request.post("/api/v1/users/register", data, {
@@ -134,6 +135,32 @@ export const getOneHotel = async (hotelId : string) : Promise<HotelType | undefi
   export const getOneHotelById = async (hotelId : string) : Promise<HotelType | undefined> => {
     try {
       const response = await request.get(`/api/v1/hotels/getOneHotel/${hotelId}`);
+      return response.data;
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+    };
+    
+
+
+    
+  export const createPaymentIntent = async (hotelId : string , numberOfNights : string) : Promise<PaymentIntentResponse | undefined> => {
+    try {
+      const response = await request.post(`/api/v1/hotels/${hotelId}/booking/payment-intent` , {numberOfNights});
+      return response.data;
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+    };
+
+    
+  export const createRoomBooking = async (formData : BookingFormData) : Promise<PaymentIntentResponse | undefined> => {
+    try {
+      const response = await request.post(`/api/v1/hotels/${formData.hotelId}/bookings` , {formData});
       return response.data;
       
     } catch (error) {

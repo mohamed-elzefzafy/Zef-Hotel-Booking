@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import asyncHandler from "../middlewares/asyncHandler";
 import HotelModel from "../models/hotel.Model";
-import { hotelSearchResponse } from "../utils/types";
+import { BookingType, hotelSearchResponse } from "../utils/types";
 import customErrorClass from "../utils/customErrorClass";
 import dotenv from "dotenv";
 import path from "path";
@@ -125,6 +125,26 @@ if (!paymentIntent) {
 if (paymentIntent.metadata.hotelId !== req.params.hotelId || paymentIntent.metadata.userId !==  req.userId) {
   return res.status(500).json({message : "payment intent do not match"});
 } 
+
+if (paymentIntent.status !== "succeeded") {
+  return res.status(500).json({message : `payment intent not succeeded. Status: ${paymentIntent.status}`,});
+}
+
+const newBooking : BookingType = {
+  ...req.body ,
+   userId :req.userId,
+}
+
+const hotel = await HotelModel.findOneAndUpdate({_id : req.params.hotelId} ,{
+  $push : {bookings : newBooking}
+})
+
+if (!hotel) {
+  return res.status(500).json({message : "hotel not found"});
+}
+
+await hotel.save();
+res.status(200).send();
 
  });
 
