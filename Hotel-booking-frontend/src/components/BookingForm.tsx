@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form"
 import { PaymentIntentResponse, UserType } from "../utils/types"
-import { CardElement, Elements, useElements, useStripe } from "@stripe/react-stripe-js";
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { StripeCardElement } from "@stripe/stripe-js";
 import { useSearchContext } from "./contexts/Searchcontext";
 import { useParams } from "react-router-dom";
@@ -72,9 +72,12 @@ const result = await stripe?.confirmCardPayment(paymentInten.clientSecret , {
 })
 
 if (result.paymentIntent?.status === "succeeded") {
-bookRoom({...formData , paymentIntentId : result.paymentIntent.id})
+bookRoom({...formData , paymentIntentId : result?.paymentIntent.id})
 }
 }
+
+
+
   return (
     <form className="grid grid-cols-1 gap-5 rounded-lg border border-slate-300 p-5" onSubmit={handleSubmit(onSubmit)}>
          <span className="text-3xl font-bold">Confirm Your Details</span>

@@ -160,7 +160,7 @@ export const getOneHotel = async (hotelId : string) : Promise<HotelType | undefi
     
   export const createRoomBooking = async (formData : BookingFormData) : Promise<PaymentIntentResponse | undefined> => {
     try {
-      const response = await request.post(`/api/v1/hotels/${formData.hotelId}/bookings` , {formData});
+      const response = await request.post(`/api/v1/hotels/${formData?.hotelId}/bookings` , {formData});
       return response.data;
       
     } catch (error) {
@@ -169,3 +169,28 @@ export const getOneHotel = async (hotelId : string) : Promise<HotelType | undefi
     }
     };
     
+
+
+    export const getMyBooking = async () : Promise<HotelType[] | undefined> => {
+      try {
+        const response = await request.get(`/api/v1/my-bookings`);
+        return response.data;
+        
+      } catch (error) {
+        console.log(error);
+        
+      }
+      };
+
+      
+    export const getAllTheHotels = async () : Promise<HotelType[] | undefined> => {
+      try {
+        const response = await request.get(`/api/v1/hotels`);
+        return response.data;
+        
+      } catch (error) {
+        console.log(error);
+        
+      }
+      };
+      

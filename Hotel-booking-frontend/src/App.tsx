@@ -11,6 +11,7 @@ import EditHotel from './pages/EditHotel'
 import SearchPage from './pages/SearchPage'
 import HotelDetailsPage from './pages/HotelDetailsPage'
 import BookingPage from './pages/BookingPage'
+import MyBookingsPage from './pages/MyBookingsPage'
 
 function App() {
   const {isLoggedIn} = useAppContext();
@@ -33,6 +34,7 @@ function App() {
 <Route path='/hotel/:hotelId/booking' element={<Layout> <BookingPage/>  </Layout>}/>
 <Route path='/edit-hotel/:hotelId' element={<Layout> <EditHotel/>  </Layout>}/>
 <Route path='/my-hotels' element={<Layout> <MyHotels/>  </Layout>}/>
+<Route path='/my-booking' element={<Layout> <MyBookingsPage/>  </Layout>}/>
 
 </>
 }

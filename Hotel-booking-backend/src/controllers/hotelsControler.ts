@@ -65,6 +65,20 @@ const response : hotelSearchResponse = {
 
 
 
+ 
+ /**---------------------------------------
+ * @desc     addHotel
+ * @route   /api/v1/my-hotels
+ * @method  POST
+ * @access  public 
+ ----------------------------------------*/
+ export const getAllHotels = asyncHandler(async (req : Request , res : Response, next : NextFunction)   => {
+const hotels = await HotelModel.find().sort("-lastUpdated");
+res.status(200).json(hotels);
+ });
+
+
+
  /**---------------------------------------
  * @desc     bookin Pyment Intent
  * @route   /api/v1/hotels/:hotelId/booking/payment-intent
